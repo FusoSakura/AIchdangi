@@ -46,7 +46,10 @@ void loop() {
       digitalWrite(pin7, LOW);
       digitalWrite(pin8, HIGH);
     }
-  }import cv2
+  }
+# 파이썬 코드드  
+
+import cv2
 import numpy as np
 from ultralytics import YOLO
 import serial
@@ -135,6 +138,4 @@ cv2.destroyAllWindows()
 시리얼 통신 채택
 }
 
-
-파이썬 코드
 
