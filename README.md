@@ -5,7 +5,7 @@
 
 V1.1 fixed codes
 
-아두이노 코드
+# 아두이노 코드
 
 #include <Servo.h>
 
@@ -52,9 +52,9 @@ from ultralytics import YOLO
 import serial
 import time
 
-# 아두이노 시리얼 포트 설정 (자신 환경에 맞게 수정)
+
 arduino = serial.Serial('COM3', 9600, timeout=1)
-time.sleep(2)  # 아두이노 초기화 대기
+time.sleep(2)  
 
 det_model = YOLO("yolov8n.pt")
 
@@ -63,7 +63,7 @@ if not cam.isOpened():
     print("카메라 열기 실패")
     exit()
 
-prev_state = None  # 이전 차량 감지 상태 저장
+prev_state = None 
 
 while True:
     ret, frame = cam.read()
