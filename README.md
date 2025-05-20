@@ -5,7 +5,48 @@
 
 V1.1 fixed codes
 
-import cv2
+아두이노 코드
+
+#include <Servo.h>
+
+Servo myservo;
+
+const int servoPin = 9;  // 서보 모터 핀 번호 (예시)
+const int pin7 = 7;      // 디지털 7번 핀
+const int pin8 = 8;      // 디지털 8번 핀
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial); // 시리얼 연결 대기
+  delay(2000);     // 초기화 대기
+
+  myservo.attach(servoPin);
+  pinMode(pin7, OUTPUT);
+  pinMode(pin8, OUTPUT);
+
+  myservo.write(160);        // 초기 서보 위치
+  digitalWrite(pin7, LOW);
+  digitalWrite(pin8, LOW);
+
+  // 시리얼 버퍼 클리어
+  while (Serial.available()) Serial.read();
+}
+
+void loop() {
+  if (Serial.available()) {
+    char command = Serial.read();
+
+    if (command == 'C') {  // 차량 감지됨
+      myservo.write(65);
+      digitalWrite(pin7, HIGH);
+      digitalWrite(pin8, LOW);
+    }
+    else if (command == 'N') {  // 차량 감지 안됨
+      myservo.write(160);
+      digitalWrite(pin7, LOW);
+      digitalWrite(pin8, HIGH);
+    }
+  }import cv2
 import numpy as np
 from ultralytics import YOLO
 import serial
@@ -77,48 +118,23 @@ while True:
             arduino.write(b'C')  # 차량 감지 신호
             print("아두이노: 차량 감지 명령 전송")
         else:
-            arduino.write(b'N')  # 차량 미감지
+            arduino.write(b'N')  # 차량 미감지 신호
+            print("아두이노: 차량 미감지 명령 전송")
+        prev_state = car_detected
+
+    cv2.imshow('cam', display_frame)
+
+    if cv2.waitKey(1) == ord('q'):
+        break
+
+arduino.close()
+cam.release()
+cv2.destroyAllWindows()
 
 
-#include <Servo.h>
-
-Servo myservo;
-
-const int servoPin = 9;  // 서보 모터 핀 번호 (예시)
-const int pin7 = 7;      // 디지털 7번 핀
-const int pin8 = 8;      // 디지털 8번 핀
-
-void setup() {
-  Serial.begin(9600);
-  while (!Serial); // 시리얼 연결 대기
-  delay(2000);     // 초기화 대기
-
-  myservo.attach(servoPin);
-  pinMode(pin7, OUTPUT);
-  pinMode(pin8, OUTPUT);
-
-  myservo.write(160);        // 초기 서보 위치
-  digitalWrite(pin7, LOW);
-  digitalWrite(pin8, LOW);
-
-  // 시리얼 버퍼 클리어
-  while (Serial.available()) Serial.read();
+시리얼 통신 채택
 }
 
-void loop() {
-  if (Serial.available()) {
-    char command = Serial.read();
 
-    if (command == 'C') {  // 차량 감지됨
-      myservo.write(65);
-      digitalWrite(pin7, HIGH);
-      digitalWrite(pin8, LOW);
-    }
-    else if (command == 'N') {  // 차량 감지 안됨
-      myservo.write(160);
-      digitalWrite(pin7, LOW);
-      digitalWrite(pin8, HIGH);
-    }
-  }
-}
-오늘 존나 큰거 한건 했다. 
+파이썬 코드
+
